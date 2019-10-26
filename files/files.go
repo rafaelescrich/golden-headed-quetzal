@@ -6,14 +6,14 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// File metadata
-type File struct {
+// Metadata holds information about the file
+type Metadata struct {
 	gorm.Model
 	Filename string
 }
 
-// FileContent has the contents of a file
-type FileContent struct {
+// Content has the contents of a file
+type Content struct {
 	gorm.Model
 	CPF                string
 	Private            int
