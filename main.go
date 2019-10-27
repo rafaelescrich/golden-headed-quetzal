@@ -2,11 +2,15 @@ package main
 
 import (
 	"io"
+	"log"
 	"net/http"
 	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+
+	"github.com/rafaelescrich/golden-headed-quetzal/config"
+	"github.com/rafaelescrich/golden-headed-quetzal/db"
 )
 
 func root(c echo.Context) error {
@@ -15,7 +19,12 @@ func root(c echo.Context) error {
 
 func getFiles(c echo.Context) error {
 	id := c.Param("id")
-	return c.String(http.StatusOK, id)
+	return c.JSON(http.StatusOK, id)
+}
+
+func getContents(c echo.Context) error {
+	contents := "contents"
+	return c.JSON(http.StatusOK, contents)
 }
 
 func upload(c echo.Context) error {
@@ -51,6 +60,18 @@ func upload(c echo.Context) error {
 }
 
 func main() {
+
+	err := config.Load()
+
+	if err != nil {
+		log.Fatal("Error while initializing config: ", err)
+	}
+
+	err = db.Connect()
+	if err != nil {
+		log.Fatal("Could not connect to database: ", err)
+	}
+
 	e := echo.New()
 
 	e.Use(middleware.Logger())
@@ -60,6 +81,7 @@ func main() {
 
 	e.POST("/upload", upload)
 	e.GET("/files/:id", getFiles)
+	e.GET("/contents", getContents)
 
 	e.Logger.Fatal(e.Start(":1337"))
 }

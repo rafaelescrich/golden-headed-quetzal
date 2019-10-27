@@ -24,3 +24,15 @@ type Content struct {
 	LojaMaisFrequente  string
 	LojaUltimaCompra   string
 }
+
+// ResponseFiles creates a json response with files
+type ResponseFiles struct {
+	Count int        `json:"count"`
+	Files []Metadata `json:"files"`
+}
+
+// ResponseContent creates a json response with contents
+type ResponseContent struct {
+	Count    int       `json:"count"`
+	Contents []Content `json:"contents"`
+}

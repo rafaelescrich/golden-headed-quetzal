@@ -1,0 +1,17 @@
+version: '3'
+services:
+  db:
+    image: postgres:12-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "golden-headed-quetzal"
+
+  golden-headed-quetzal:
+    build: .
+    ports:
+      - "1337:1337"
+    depends_on:
+      - db
+    links:
+      - db
