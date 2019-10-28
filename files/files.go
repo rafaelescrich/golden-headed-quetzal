@@ -23,6 +23,7 @@ type Content struct {
 	TicketUltimaCompra float32
 	LojaMaisFrequente  string
 	LojaUltimaCompra   string
+	MetadataID         int
 }
 
 // ResponseFiles creates a json response with files

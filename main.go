@@ -1,10 +1,9 @@
 package main
 
 import (
-	"io"
+	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -49,17 +48,25 @@ func upload(c echo.Context) error {
 	}
 	defer src.Close()
 
-	// Destination
-	dst, err := os.Create(file.Filename)
+	content := make([]byte, file.Size)
+	bytesRead, err := src.Read(content)
 	if err != nil {
-		return err
+		return c.JSON(403, "Could not read the file: "+err.Error())
 	}
-	defer dst.Close()
 
-	// Copy
-	if _, err = io.Copy(dst, src); err != nil {
-		return err
-	}
+	fmt.Printf("%d bytes: %s\n", bytesRead, string(content[:bytesRead]))
+
+	// // Destination
+	// dst, err := os.Create(file.Filename)
+	// if err != nil {
+	// 	return err
+	// }
+	// defer dst.Close()
+
+	// // Copy
+	// if _, err = io.Copy(dst, src); err != nil {
+	// 	return err
+	// }
 
 	return c.JSON(http.StatusOK, "File "+file.Filename+" uploaded successfully.")
 }

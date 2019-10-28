@@ -39,3 +39,11 @@ docker run -it --name pq -e POSTGRES_PASSWORD=golden-headed-quetzal -p 5432:5432
 ```bash
  make run-debug
 ```
+
+### Upload File
+
+To upload a file you can type the command below
+
+```bash
+curl -F 'file=@base_teste.txt' http://localhost:1337/upload
+```
