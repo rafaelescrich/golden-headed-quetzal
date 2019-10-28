@@ -11,7 +11,12 @@ import (
 
 	"github.com/rafaelescrich/golden-headed-quetzal/config"
 	"github.com/rafaelescrich/golden-headed-quetzal/db"
+	"github.com/rafaelescrich/golden-headed-quetzal/files"
 )
+
+func migrate() {
+	db.DB.AutoMigrate(&files.Metadata{}, &files.Content{})
+}
 
 func root(c echo.Context) error {
 	return c.JSON(http.StatusOK, "CSV/TXT Uploader and Parser Version 0.0.1")
@@ -71,6 +76,9 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not connect to database: ", err)
 	}
+
+	// Add tables to db if they dont exist
+	migrate()
 
 	e := echo.New()
 
