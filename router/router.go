@@ -1,7 +1,9 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -16,7 +18,8 @@ func NewRouter(e *echo.Echo) {
 	e.GET("/", root)
 
 	e.POST("/upload", upload)
-	e.GET("/files/:id", getFiles)
+	e.GET("/files", getFiles)
+	e.GET("/files/:id", getFile)
 	e.GET("/contents", getContents)
 }
 
@@ -25,13 +28,26 @@ func root(c echo.Context) error {
 }
 
 func getFiles(c echo.Context) error {
-	id := c.Param("id")
-	return c.JSON(http.StatusOK, id)
+	return c.JSON(http.StatusOK, files.GetMetadatas())
+}
+
+func getFile(c echo.Context) error {
+	idStr := c.Param("id")
+
+	fmt.Printf(idStr)
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return c.JSON(403, "Invalid id: "+err.Error())
+	}
+
+	meta := files.GetMetadata(id)
+
+	return c.JSON(http.StatusOK, meta)
 }
 
 func getContents(c echo.Context) error {
-	contents := "contents"
-	return c.JSON(http.StatusOK, contents)
+	return c.JSON(http.StatusOK, files.GetContents())
 }
 
 func upload(c echo.Context) error {

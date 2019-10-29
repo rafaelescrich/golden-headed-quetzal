@@ -13,34 +13,22 @@ import (
 // Metadata holds information about the file
 type Metadata struct {
 	gorm.Model
-	filename string
-	size     int64
+	filename string `json:"filename"`
+	size     int64  `json:"size"`
 }
 
 // Content has the contents of a file
 type Content struct {
 	gorm.Model
-	cpf                string
-	private            int
-	incompleto         int
-	dataUltimaCompra   string
-	ticketMedio        string
-	ticketUltimaCompra string
-	lojaMaisFrequente  string
-	lojaUltimaCompra   string
-	metadataID         uint
-}
-
-// ResponseFiles creates a json response with files
-type ResponseFiles struct {
-	Count int        `json:"count"`
-	Files []Metadata `json:"files"`
-}
-
-// ResponseContent creates a json response with contents
-type ResponseContent struct {
-	Count    int       `json:"count"`
-	Contents []Content `json:"contents"`
+	cpf                string `json:"cpf"`
+	private            int    `json:"private"`
+	incompleto         int    `json:"incompleto"`
+	dataUltimaCompra   string `json:"data_ultima_compra"`
+	ticketMedio        string `json:"ticket_medio"`
+	ticketUltimaCompra string `json:"ticket_ultima_compra"`
+	lojaMaisFrequente  string `json:"loka_mais_frequente"`
+	lojaUltimaCompra   string `json:"loka_ultima_compra"`
+	metadataID         uint   `json:"metadata_id"`
 }
 
 func scanLines(file multipart.File) (lines []string) {
@@ -104,7 +92,7 @@ func saveContent(file multipart.File, id uint) (err error) {
 		}
 	}
 
-	// begin a transaction
+	// begin a transaction to reduce the time to save in the database
 	tx := db.DB.Begin()
 
 	// do some database operations in the transaction (use 'tx' from this point, not 'db')
@@ -128,6 +116,30 @@ func Save(filename string, size int64, file multipart.File) (err error) {
 	if err != nil {
 		return
 	}
+
+	return
+}
+
+// GetContents returns all contents
+func GetContents() (contents []Content) {
+
+	db.DB.Find(&contents)
+
+	return
+}
+
+// GetMetadatas Return all metadata
+func GetMetadatas() (metas []Metadata) {
+
+	db.DB.Find(&metas)
+
+	return
+}
+
+// GetMetadata return one metadata
+func GetMetadata(id int) (metadata Metadata) {
+
+	db.DB.First(&metadata, id)
 
 	return
 }
