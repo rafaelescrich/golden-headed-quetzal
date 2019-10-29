@@ -22,8 +22,8 @@ docker-compose up
 
 ## Config Env
 
-- If you are creating a docker you have to copy config-example.toml to config.toml on root directory and alter the fields as you like
-- Otherwise, to run the binary directly on the server, you can copy config-example.toml to bin/config/config.toml
+- If you are creating a docker you have to copy config-example.toml to config.toml inside config directory and alter the fields as you like
+- Otherwise, to run the binary directly on the server, you can copy config-example.toml to bconfig/config.toml
 - After that, edit config.toml with your database and server settings. You can use docker-compose.yml as a reference.
 
 ## Run project in debug mode
